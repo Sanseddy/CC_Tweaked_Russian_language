@@ -8,11 +8,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import ru.ziftech.ccrulang.client.CyrillicFont;
 import ru.ziftech.ccrulang.client.CyrillicRenderState;
 
-/**
- * Redirects the ~66 Cyrillic byte values away from the normal term_font.png glyph by recording them into
- * {@link CyrillicRenderState} (see that class for why this can't just draw a quad from russian_font.png
- * right here) instead of drawing them. Everything else draws exactly as before.
- */
 @Mixin(FixedWidthFontRenderer.class)
 public class FixedWidthFontRendererMixin {
     @Inject(method = "drawChar", at = @At("HEAD"), cancellable = true)
