@@ -1,0 +1,13 @@
+{
+    "required": false,
+    "package": "ru.ziftech.ccrulang.mixin.client",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_21",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "client": [
+        "AbstractComputerScreenMixin",
+        "FixedWidthFontRendererMixin"
+    ]
+}

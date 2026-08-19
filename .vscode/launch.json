@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Client",
+      "presentation": {
+        "group": "Mod Development - ccrulang",
+        "order": 0
+      },
+      "projectName": "ccrulang",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\clientRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dccrulang%%D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    },
+    {
+      "type": "java",
+      "request": "launch",
+      "name": "Server",
+      "presentation": {
+        "group": "Mod Development - ccrulang",
+        "order": 1
+      },
+      "projectName": "ccrulang",
+      "mainClass": "net.neoforged.devlaunch.Main",
+      "args": [
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\serverRunProgramArgs.txt"
+      ],
+      "vmArgs": [
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dccrulang%%D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\bin\\main"
+      ],
+      "cwd": "${workspaceFolder}\\run",
+      "env": {},
+      "console": "internalConsole",
+      "shortenCommandLine": "none"
+    }
+  ]
+}
