@@ -1,0 +1,21 @@
+{
+    "required": true,
+    "package": "ru.sanseddy.cctweakedunicodesupport.mixin.client",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_21",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "client": [
+        "AbstractComputerScreenMixin",
+        "CustomLecternRendererMixin",
+        "DirectFixedWidthFontRendererMixin",
+        "FixedWidthFontRendererInvoker",
+        "FixedWidthFontRendererMixin",
+        "MonitorBlockEntityRendererMixin",
+        "MonitorTextureBufferShaderMixin",
+        "PocketItemRendererMixin",
+        "PrintoutRendererMixin",
+        "TerminalWidgetMixin"
+    ]
+}

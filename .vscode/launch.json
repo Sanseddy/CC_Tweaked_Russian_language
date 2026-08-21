@@ -6,17 +6,17 @@
       "request": "launch",
       "name": "Client",
       "presentation": {
-        "group": "Mod Development - ccrulang",
+        "group": "Mod Development - cc-tweaked-unicode-support",
         "order": 0
       },
-      "projectName": "ccrulang",
+      "projectName": "cc-tweaked-unicode-support",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\clientRunProgramArgs.txt"
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\cc-unicode-support-neoforge\\build\\moddev\\clientRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\clientRunVmArgs.txt",
-        "-Dfml.modFolders\u003dccrulang%%D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\bin\\main"
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\cc-unicode-support-neoforge\\build\\moddev\\clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcc_tweaked_unicode_support%%D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\cc-unicode-support-neoforge\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},
@@ -28,17 +28,17 @@
       "request": "launch",
       "name": "Server",
       "presentation": {
-        "group": "Mod Development - ccrulang",
+        "group": "Mod Development - cc-tweaked-unicode-support",
         "order": 1
       },
-      "projectName": "ccrulang",
+      "projectName": "cc-tweaked-unicode-support",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\serverRunProgramArgs.txt"
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\cc-unicode-support-neoforge\\build\\moddev\\serverRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\build\\moddev\\serverRunVmArgs.txt",
-        "-Dfml.modFolders\u003dccrulang%%D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\ccrulang-neoforge\\bin\\main"
+        "@D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\cc-unicode-support-neoforge\\build\\moddev\\serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dcc_tweaked_unicode_support%%D:\\Windows\\Desktop\\CC_Tweaked_Russian_language\\cc-unicode-support-neoforge\\bin\\main"
       ],
       "cwd": "${workspaceFolder}\\run",
       "env": {},

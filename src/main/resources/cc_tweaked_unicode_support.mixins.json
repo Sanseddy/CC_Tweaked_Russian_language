@@ -1,0 +1,17 @@
+{
+    "required": true,
+    "package": "ru.sanseddy.cctweakedunicodesupport.mixin",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_21",
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "mixins": [
+        "AbstractHandleMixin",
+        "NetworkedTerminalMixin",
+        "PrinterPeripheralMixin",
+        "StringUtilMixin",
+        "TermMethodsMixin",
+        "TerminalStateAccessor"
+    ]
+}
