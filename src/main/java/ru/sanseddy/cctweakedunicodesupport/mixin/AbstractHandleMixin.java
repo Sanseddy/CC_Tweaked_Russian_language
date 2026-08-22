@@ -7,6 +7,7 @@ import dan200.computercraft.core.apis.handles.AbstractHandle;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,6 +21,9 @@ import java.util.Optional;
 
 @Mixin(AbstractHandle.class)
 public class AbstractHandleMixin {
+    @Unique
+    private boolean cc_tweaked_unicode_support$binaryContent;
+
     @Shadow
     @Final
     protected boolean binary;
@@ -44,10 +48,15 @@ public class AbstractHandleMixin {
     }
 
     private void cc_tweaked_unicode_support$promoteResult(CallbackInfoReturnable<Object[]> cir) {
-        if (binary) return;
+        if (binary || cc_tweaked_unicode_support$binaryContent) return;
 
         var result = cir.getReturnValue();
         if (result == null || result.length == 0 || !(result[0] instanceof byte[] bytes)) return;
+
+        if (Utf8.isBinaryContent(bytes, 0, bytes.length)) {
+            cc_tweaked_unicode_support$binaryContent = true;
+            return;
+        }
 
         var promoted = Utf8.toUnicode(bytes, 0, bytes.length);
         if (promoted != null) cir.setReturnValue(new Object[]{promoted});
@@ -74,7 +83,8 @@ public class AbstractHandleMixin {
         var bytes = new byte[buffer.remaining()];
         buffer.duplicate().get(bytes);
 
-        var folded = Utf8.toLegacy(bytes, 0, bytes.length);
+        if (Utf8.isBinaryContent(bytes, 0, bytes.length)) cc_tweaked_unicode_support$binaryContent = true;
+        var folded = cc_tweaked_unicode_support$binaryContent ? null : Utf8.toLegacy(bytes, 0, bytes.length);
         try {
             channel.write(ByteBuffer.wrap(folded == null ? bytes : folded));
         } catch (IOException e) {

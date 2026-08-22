@@ -8,7 +8,9 @@ import java.nio.ByteBuffer;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Utf8Test {
     @Test
@@ -99,6 +101,47 @@ class Utf8Test {
         var astral = new String(Character.toChars(0x1F642)).getBytes(StandardCharsets.UTF_8);
         assertNull(Utf8.toUnicode(astral, 0, astral.length));
         assertNull(Utf8.toLegacy(astral, 0, astral.length));
+    }
+
+    @Test
+    void filesystemConversionsPreserveDocxZipContainer() {
+        var docx = new byte[]{
+            'P', 'K', 3, 4, 20, 0, 0, 0,
+            (byte) 0xE2, (byte) 0x96, (byte) 0x8C,
+            0, (byte) 0xFF, 1, 2, 3
+        };
+
+        assertTrue(Utf8.isBinaryContent(docx, 0, docx.length));
+        assertNull(Utf8.toUnicode(docx, 0, docx.length));
+        assertNull(Utf8.toLegacy(docx, 0, docx.length));
+    }
+
+    @Test
+    void filesystemConversionsPreserveCommonBinaryFormats() {
+        var formats = new byte[][]{
+            {(byte) 0x89, 'P', 'N', 'G', 13, 10, 26, 10},
+            {(byte) 0xFF, (byte) 0xD8, (byte) 0xFF, (byte) 0xE0},
+            {'G', 'I', 'F', '8', '9', 'a'},
+            {'%', 'P', 'D', 'F', '-', '1', '.', '7'},
+            {0x1F, (byte) 0x8B, 8, 0},
+            {'R', 'a', 'r', '!', 0x1A, 7, 1, 0},
+            {0x37, 0x7A, (byte) 0xBC, (byte) 0xAF, 0x27, 0x1C},
+            {'R', 'I', 'F', 'F', 0, 0, 0, 0, 'W', 'A', 'V', 'E'},
+            {'%', 'P', 'D', 'F', '-', (byte) 0xE2, (byte) 0x96, (byte) 0x8C},
+            {(byte) 0xCA, (byte) 0xFE, (byte) 0xBA, (byte) 0xBE},
+            {(byte) 0xD0, (byte) 0xCF, 0x11, (byte) 0xE0},
+            {'{', '\\', 'r', 't', 'f', '1'},
+            {0, 1, 2, 3}
+        };
+
+        for (var format : formats) {
+            assertTrue(Utf8.isBinaryContent(format, 0, format.length));
+            assertNull(Utf8.toUnicode(format, 0, format.length));
+            assertNull(Utf8.toLegacy(format, 0, format.length));
+        }
+
+        var text = "Русский текст\n".getBytes(StandardCharsets.UTF_8);
+        assertFalse(Utf8.isBinaryContent(text, 0, text.length));
     }
 
     @Test

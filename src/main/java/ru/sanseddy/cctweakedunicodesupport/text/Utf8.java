@@ -251,6 +251,8 @@ public final class Utf8 {
     }
 
     public static byte[] toUnicode(byte[] bytes, int offset, int length) {
+        if (isBinaryContent(bytes, offset, length)) return null;
+
         var out = new ByteArrayOutputStream(length + (length >> 2));
         var changed = false;
         var i = 0;
@@ -275,6 +277,8 @@ public final class Utf8 {
     }
 
     public static byte[] toLegacy(byte[] bytes, int offset, int length) {
+        if (isBinaryContent(bytes, offset, length)) return null;
+
         var out = new ByteArrayOutputStream(length);
         var changed = false;
         var i = 0;
@@ -294,5 +298,66 @@ public final class Utf8 {
             i += consumed;
         }
         return changed ? out.toByteArray() : null;
+    }
+
+    public static boolean isBinaryContent(byte[] bytes, int offset, int length) {
+        if (offset < 0 || length <= 0 || offset > bytes.length || length > bytes.length - offset) return false;
+        if (hasBinarySignature(bytes, offset, length)) return true;
+
+        var controls = 0;
+        var limit = Math.min(length, 512);
+        for (var i = 0; i < limit; i++) {
+            var value = bytes[offset + i] & 0xFF;
+            if (value == 0) return true;
+            if ((value < 0x20 && value != '\t' && value != '\n' && value != '\f' && value != '\r')
+                || value == 0x7F) {
+                if (++controls >= 2) return true;
+            }
+        }
+        return false;
+    }
+
+    private static boolean hasBinarySignature(byte[] bytes, int offset, int length) {
+        var first = bytes[offset] & 0xFF;
+        var second = length > 1 ? bytes[offset + 1] & 0xFF : -1;
+        var third = length > 2 ? bytes[offset + 2] & 0xFF : -1;
+        var fourth = length > 3 ? bytes[offset + 3] & 0xFF : -1;
+
+        if (first == 'P' && second == 'K' && (third == 3 && fourth == 4
+            || third == 5 && fourth == 6 || third == 7 && fourth == 8)) return true;
+        if (first == 0x89 && startsWithAscii(bytes, offset, length, 1, "PNG")) return true;
+        if (first == 0xFF && (second == 0xD8 || (second & 0xE0) == 0xE0)) return true;
+        if (first == 'G' && startsWithAscii(bytes, offset, length, 0, "GIF8")) return true;
+        if (first == '%' && startsWithAscii(bytes, offset, length, 0, "%PDF-")) return true;
+        if (first == 0x1F && second == 0x8B) return true;
+        if (first == 0x37 && second == 0x7A && third == 0xBC && fourth == 0xAF) return true;
+        if (first == 'R' && (startsWithAscii(bytes, offset, length, 0, "Rar!")
+            || startsWithAscii(bytes, offset, length, 0, "RIFF"))) return true;
+        if (first == 'B' && (second == 'M' || startsWithAscii(bytes, offset, length, 0, "BZh"))) return true;
+        if (first == 'I' && (startsWithAscii(bytes, offset, length, 0, "ID3")
+            || second == 'I' && third == 0x2A && fourth == 0)) return true;
+        if (first == 'M' && (second == 'Z' || second == 'M' && third == 0 && fourth == 0x2A)) return true;
+        if (first == 'O' && (startsWithAscii(bytes, offset, length, 0, "OggS")
+            || startsWithAscii(bytes, offset, length, 0, "OTTO"))) return true;
+        if (first == 'f' && startsWithAscii(bytes, offset, length, 0, "fLaC")) return true;
+        if (first == 'S' && startsWithAscii(bytes, offset, length, 0, "SQLite format 3")) return true;
+        if (first == 'w' && (startsWithAscii(bytes, offset, length, 0, "wOFF")
+            || startsWithAscii(bytes, offset, length, 0, "wOF2"))) return true;
+        if (first == '{' && startsWithAscii(bytes, offset, length, 0, "{\\rtf")) return true;
+        if (first == 0x7F && startsWithAscii(bytes, offset, length, 1, "ELF")) return true;
+        if (first == 0xCA && second == 0xFE && third == 0xBA && fourth == 0xBE) return true;
+        if (first == 0xD0 && second == 0xCF && third == 0x11 && fourth == 0xE0) return true;
+        if (first == 0xFD && second == 0x37 && third == 0x7A && fourth == 0x58) return true;
+        if (first == 0x28 && second == 0xB5 && third == 0x2F && fourth == 0xFD) return true;
+        if (startsWithAscii(bytes, offset, length, 4, "ftyp")) return true;
+        return startsWithAscii(bytes, offset, length, 257, "ustar");
+    }
+
+    private static boolean startsWithAscii(byte[] bytes, int offset, int length, int position, String signature) {
+        if (position < 0 || position > length - signature.length()) return false;
+        for (var i = 0; i < signature.length(); i++) {
+            if ((bytes[offset + position + i] & 0xFF) != signature.charAt(i)) return false;
+        }
+        return true;
     }
 }
